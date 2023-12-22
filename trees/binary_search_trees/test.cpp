@@ -58,6 +58,7 @@ int main() {
     bst1.insert(5);
     bst1.insert(2);
     bst1.insert(1);
+    bst1.insert(6);
     bst1.insert(3);
     bst1.inorderTraversal();
     return 0;

@@ -16,19 +16,19 @@ using namespace std;
 // - Used when a stable sort is not required and guaranteed performance is essential.
 
 void heapify(vector<int>& arr, int n, int index) {
-    int largest = index;
+    int max = index;
     int left = 2 * index + 1;
     int right = 2 * index + 2;
 
-    if (left < n && arr[left] > arr[largest])
-        largest = left;
+    if (left < n && arr[left] > arr[max])
+        max = left;
 
-    if (right < n && arr[right] > arr[largest])
-        largest = right;
+    if (right < n && arr[right] > arr[max])
+        max = right;
 
-    if (largest != index) {
-        swap(arr[index], arr[largest]);
-        heapify(arr, n, largest);
+    if (max != index) {
+        swap(arr[index], arr[max]);
+        heapify(arr, n, max);
     }
 }
 

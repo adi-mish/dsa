@@ -119,6 +119,8 @@ int main() {
     bst1.insert(1);
     bst1.insert(6);
     bst1.insert(3);
+    bst1.insert(8);
+    bst1.insert(7);
     bst1.inorderTraversal();
     bst1.preOrderTraversal();
     bst1.postOrderTraversal();

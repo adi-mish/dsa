@@ -57,6 +57,28 @@ private:
         }
     }
 
+// Method to find max value in tree. Time Complexity: O(h), where h is the height of the tree    
+    T findMax (TreeNode<T>* node) {
+        if (node == nullptr)
+            throw logic_error("Empty tree");
+
+        while (node->rightNode != nullptr) {
+            node = node->rightNode;
+        }
+        return node->data;
+    }
+
+// Method to find min value in tree. Time Complexity: O(h), where h is the height of the tree    
+    T findMin (TreeNode<T>* node) {
+        if (node == nullptr)
+            throw logic_error("Empty tree");
+
+        while (node->leftNode != nullptr) {
+            node = node->leftNode;
+        }
+        return node->data;
+    }
+
 public:
     BST() : root(nullptr) {}
 
@@ -78,6 +100,14 @@ public:
         postOrderTraversal(root);
         cout << endl;
     }
+
+    void findMax() {
+        cout << findMax(root) << endl;
+    }
+
+    void findMin() {
+        cout << findMin(root) << endl;
+    }
 };
 
 
@@ -92,5 +122,7 @@ int main() {
     bst1.inorderTraversal();
     bst1.preOrderTraversal();
     bst1.postOrderTraversal();
+    bst1.findMax();
+    bst1.findMin();
     return 0;
 }

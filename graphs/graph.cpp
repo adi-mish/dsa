@@ -186,12 +186,9 @@ int main() {
     myGraph1.bellmanFord('X');
     cout << endl;
 
-    myGraph2.addEdge('J', 'K', 5);
-    myGraph2.addEdge('J', 'L', 8);
-    myGraph2.addEdge('K', 'L', -3);
-    myGraph2.addEdge('L', 'M', 2);
-    myGraph2.addEdge('M', 'N', 7);
-    myGraph2.addEdge('N', 'J', -4);
+    myGraph2.addEdge('J', 'K', 3);
+    myGraph2.addEdge('K', 'L', -2);
+    myGraph2.addEdge('L', 'J', -3);
     myGraph2.showGraph();
     myGraph2.bellmanFord('J');
 

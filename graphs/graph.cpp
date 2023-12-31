@@ -2,6 +2,7 @@
 #include <vector>
 #include <queue>
 #include <limits>
+#include <stdexcept>
 
 using namespace std;
 
@@ -47,6 +48,33 @@ public:
         size_t vertex2Index = makeOrGetVertexIndex(v2);
 
         vertices[vertex1Index].outEdges.emplace_back(vertex1Index, vertex2Index, weight);
+    }
+    
+    void removeVertex(T val) {
+        size_t indexToRemove = SIZE_MAX;
+        for (size_t i = 0; i < vertices.size(); ++i) {
+            if (vertices[i].data == val) {
+                indexToRemove = i;
+                break;
+            }
+        }
+
+        if (indexToRemove != SIZE_MAX) {
+            for (auto& vertex : vertices) {
+                vertex.outEdges.erase(
+                    remove_if(
+                        vertex.outEdges.begin(),
+                        vertex.outEdges.end(),
+                        [indexToRemove](const Edge<T>& edge) {
+                            return edge.destinationIndex == indexToRemove;
+                        }
+                    ),
+                    vertex.outEdges.end()
+                );
+            }
+
+            vertices.erase(vertices.begin() + indexToRemove);
+        }
     }
 
     // Time complexity: |V| log |V| + |E|
@@ -148,6 +176,77 @@ public:
         }
     }
 
+    // vector<int> bellmanFordDistances(T start) {
+    //     size_t startIndex = makeOrGetVertexIndex(start);
+    //     vector<int> distance(vertices.size(), numeric_limits<int>::max());
+    //     vector<size_t> predecessor(vertices.size(), SIZE_MAX);
+
+    //     distance[startIndex] = 0;
+
+    //     for (size_t i = 0; i < vertices.size() - 1; ++i) {
+    //         for (auto& vertex : vertices) {
+    //             size_t currentNodeIndex = makeOrGetVertexIndex(vertex.data);
+    //             for (auto& edge : vertex.outEdges) {
+    //                 size_t neighborIndex = edge.destinationIndex;
+    //                 int edgeWeight = edge.weight;
+
+    //                 if (distance[currentNodeIndex] != numeric_limits<int>::max() &&
+    //                     distance[currentNodeIndex] + edgeWeight < distance[neighborIndex]) {
+    //                     distance[neighborIndex] = distance[currentNodeIndex] + edgeWeight;
+    //                     predecessor[neighborIndex] = currentNodeIndex;
+    //                 }
+    //             }
+    //         }
+    //     }
+
+    //     for (size_t i = 0; i < vertices.size(); ++i) {
+    //         for (auto& edge : vertices[i].outEdges) {
+    //             size_t neighborIndex = edge.destinationIndex;
+    //             int edgeWeight = edge.weight;
+
+    //             if (distance[i] != numeric_limits<int>::max() &&
+    //                 distance[i] + edgeWeight < distance[neighborIndex]) {
+    //                 throw std::runtime_error("Negative cycle detected in the graph");
+    //             }
+    //         }
+    //     }
+        
+    //     return distance;
+    // }
+
+    // void johnson() {
+    //     Vertex<char> dummyVertex('S');
+    //     vertices.push_back(dummyVertex);
+    //     size_t dummyIndex = makeOrGetVertexIndex('S');
+        
+    //     for (size_t i = 0; i < vertices.size(); ++i) {
+    //         if (i != dummyIndex) {
+    //             addEdge(dummyIndex, i, 0);
+    //         }
+    //     }
+        
+    //     try {
+    //         distance = bellmanFordDistances('S');
+    //     } catch (runtime_error& e) {
+    //         cout << e.what() << endl;
+    //         return;
+    //     }
+        
+    //     // adjusted_weight(u, v) = original_weight(u, v) + distance[u] - distance[v]
+    //     for (auto& vertex : vertices) {
+    //         for (auto& edge : vertex.outEdges) {
+    //             edge.weight += distance[edge.sourceIndex] - distance[edge.destinationIndex];
+    //         }
+    //     }
+    //     for (size_t i = 0; i < vertices.size(); ++i) {
+    //         dijkstra(vertices[i].data);
+    //         for (auto& edge : vertices[i].outEdges) {
+    //             edge.weight -= distance[edge.sourceIndex] - distance[edge.destinationIndex];
+    //         }       
+    //     }
+    //     vertices.pop_back();
+    // }
+
     void showGraph() {
         for (size_t i = 0; i < vertices.size(); ++i) {
             cout << vertices[i].data << " has outgoing edges: ";
@@ -179,8 +278,6 @@ int main() {
     myGraph.addEdge('G', 'A', 6);
 
     myGraph.showGraph();
-    char startNode = 'A';
-    char endNode = 'H';
     myGraph.dijkstra('A');
 
     myGraph1.addEdge('X', 'Y', 5);

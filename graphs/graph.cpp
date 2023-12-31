@@ -50,14 +50,13 @@ public:
     }
 
     // Time complexity: |V| log |V| + |E|
-    void dijkstra(T start, T end) {
+    void dijkstra(T start) {
         priority_queue<pair<int, size_t>, vector<pair<int, size_t>>, greater<pair<int, size_t>>> pq;
         vector<int> distance(vertices.size(), numeric_limits<int>::max());
         vector<size_t> predecessor(vertices.size(), SIZE_MAX);
         vector<bool> visited(vertices.size(), false);
 
-        size_t startIndex = makeOrGetVertexIndex(start);
-        size_t endIndex = makeOrGetVertexIndex(end);
+        size_t startIndex = makeOrGetVertexIndex(start);    
 
         distance[startIndex] = 0;
         pq.push({0, startIndex});
@@ -73,21 +72,27 @@ public:
                 int weight = edge.weight;
 
                 if (distance[currentNodeIndex] + weight < distance[neighborIndex]) {
-                distance[neighborIndex] = distance[currentNodeIndex] + weight;
-                predecessor[neighborIndex] = currentNodeIndex;
-                pq.push({distance[neighborIndex], neighborIndex});
+                    distance[neighborIndex] = distance[currentNodeIndex] + weight;
+                    predecessor[neighborIndex] = currentNodeIndex;
+                    pq.push({distance[neighborIndex], neighborIndex});
                 }
             }
         }
-        cout << "Shortest distance from " << start << " to " << end << " is: " << distance[endIndex] << endl;
-        cout << "Shortest path: ";
-        size_t current = endIndex;
-        while (current != SIZE_MAX) {
-            cout << vertices[current].data;
-            if (current != startIndex) {
-                cout << " <- ";
+
+        for (size_t i = 0; i < vertices.size(); ++i) {
+            if (i != startIndex) {
+                cout << "Shortest distance from " << start << " to " << vertices[i].data << " is: " << distance[i] << " | ";
+            cout << "Shortest path: ";
+            size_t current = i;
+            while (current != SIZE_MAX) {
+                cout << vertices[current].data;
+                if (current != startIndex) {
+                    cout << " <- ";
+                }
+                current = predecessor[current];
             }
-            current = predecessor[current];
+            cout << endl;
+            }
         }
     }
 
@@ -176,8 +181,7 @@ int main() {
     myGraph.showGraph();
     char startNode = 'A';
     char endNode = 'H';
-    myGraph.dijkstra(startNode, endNode);
-    cout << endl;
+    myGraph.dijkstra('A');
 
     myGraph1.addEdge('X', 'Y', 5);
     myGraph1.addEdge('X', 'Z', 3);
